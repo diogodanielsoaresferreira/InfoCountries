@@ -1,0 +1,35 @@
+{% extends "app/layout.html" %}
+
+{% block menuNavbar %}
+    <li class="active"><a href="{% url 'home' %}">Countries</a></li>
+    <li><a href="{% url 'pred' %}">Predicates</a></li>
+    <li><a href="{% url 'inferences' %}">Inferences</a></li>
+    <li><a href="{% url 'favorites' %}">Favorites</a></li>
+    <li><a href="{% url 'statistics' %}">Statistics</a></li>
+{% endblock %}
+
+{% block content %}
+{% load staticfiles %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1 id="{{ title }}">{{ title }}</h1>
+                <p class="lead">Choose one country and see its metrics!</p>
+                <hr />
+            </div>
+            <div class="jumbotron">
+                <h3>Countries</h3>
+                <hr />
+                <div class="row">
+                    <ul>
+                    {% for country in countries %}
+                        <li><a about="countries:{{ country.uri }}" href="country/{{ country.url }}"><span property="countries:countryProperty/1">{{ country.label }}</span></a></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+{% endblock %}

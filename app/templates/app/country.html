@@ -1,0 +1,83 @@
+{% extends "app/layout.html" %}
+
+{% block menuNavbar %}
+    <li class="active"><a href="{% url 'home' %}">Countries</a></li>
+    <li><a href="{% url 'pred' %}">Predicates</a></li>
+    <li><a href="{% url 'inferences' %}">Inferences</a></li>
+    <li><a href="{% url 'favorites' %}">Favorites</a></li>
+    <li><a href="{% url 'statistics' %}">Statistics</a></li>
+{% endblock %}
+
+{% block content %}
+{% load staticfiles %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1 id="{{ title }}">{{ title }}</h1>
+                <p class="lead">Choose one metric to compare it with other countries</p>
+                <hr />
+            </div>
+            <div class="jumbotron">
+                <h3>Country information</h3>
+                <hr />
+                <div class="row">
+                    <ul>
+                    {% for predicate, metric in metrics %}
+                        <li>
+                            <a href="/metric/{{ predicate.url }}">
+                                <span about="{{ predicate.uri }}" property="foaf:name">{{ predicate.label }}</span>
+                            </a> -
+                            {% ifequal metric.uri metric.value %}
+                                <span about="countries:country/{{ country_id }}" property="{{ predicate.uri }}">{{ metric.value }}</span>
+                            {% else %}
+                                {% ifnotequal metric.url "" %}
+                                    <a href="/country/{{ metric.url }}">
+                                        <span about="countries:country/{{ country_id }}" rel="{{ predicate.uri }}">
+                                            <span about="{{ metric.uri }}" property="{{ metric.pred_nameof }}">{{ metric.value }}</span>
+                                        </span>
+                                    </a>
+                                {% else %}
+                                    <span about="countries:country/{{ country_id }}" rel="{{ predicate.uri }}">
+                                        <span about="{{ metric.uri }}" property="{{ metric.pred_nameof }}">{{ metric.value }}</span>
+                                    </span>
+                                {% endifnotequal %}
+
+
+                            {% endifequal %}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                    <br>
+                    <img style="max-height: 300px; max-width: 300px; display: block; margin: auto;" about="countries:country/{{ country_id }}" rel="countries:countryProperty/flag" src="{{ image }}">
+                    <br>
+                    {% if favorite %}
+                        <p>Country is on favorites</p>
+                        <button type="button" onclick="location.href = '/country/{{ country_id }}/favo';" class="btn btn-primary">Remove from favorites</button>
+                    {% else %}
+                        <p>Country is not on favorites</p>
+                        <button type="button" onclick="location.href = '/country/{{ country_id }}/favo';" class="btn btn-primary">Add to favorites</button>
+                    {% endif %}
+                    <br>
+                    <br>
+                    {% if has_wiki %}
+                        <p>Wikidata data is already on this country!</p>
+                        <button type="button" onclick="location.href = '/country/{{ country_id }}/reload';" class="btn btn-primary">Reload the data from wikidata!</button>
+                    {% else %}
+                        <button type="button" onclick="location.href = '/country/{{ country_id }}/reload';" class="btn btn-primary">Gather data from Wikidata!</button>
+                    {% endif %}
+                    <br>
+                    <br>
+                    {% if has_relations %}
+                        <p>Wikidata relations are already updated on this country!</p>
+                        <button type="button" onclick="location.href = '/country/{{ country_id }}/relations';" class="btn btn-primary">Reload the relations with other countries!</button>
+                    {% else %}
+                        <button type="button" onclick="location.href = '/country/{{ country_id }}/relations';" class="btn btn-primary">Try to get relations with other countries!</button>
+                    {% endif %}
+
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+{% endblock %}

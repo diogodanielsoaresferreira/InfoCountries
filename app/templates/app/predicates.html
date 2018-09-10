@@ -1,0 +1,35 @@
+{% extends "app/layout.html" %}
+
+{% block menuNavbar %}
+    <li><a href="{% url 'home' %}">Countries</a></li>
+    <li class="active"><a href="{% url 'pred' %}">Predicates</a></li>
+    <li><a href="{% url 'inferences' %}">Inferences</a></li>
+    <li><a href="{% url 'favorites' %}">Favorites</a></li>
+    <li><a href="{% url 'statistics' %}">Statistics</a></li>
+{% endblock %}
+
+{% block content %}
+{% load staticfiles %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1 id="{{ title }}">{{ title }}</h1>
+                <p class="lead">Choose one predicate and see its relations</p>
+                <hr />
+            </div>
+            <div class="jumbotron">
+                <h3>Predicates</h3>
+                <hr />
+                <div class="row">
+                    <ul>
+                    {% for predicate in predicates %}
+                        <li about="countries:countryProperty/{{ predicate.id }}"><a href="/metric/{{ predicate.id }}"><span property="foaf:name">{{ predicate.name }}</span></a></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+{% endblock %}

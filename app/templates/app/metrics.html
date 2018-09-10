@@ -1,0 +1,82 @@
+{% extends "app/layout.html" %}
+
+{% block menuNavbar %}
+    <li><a href="{% url 'home' %}">Countries</a></li>
+    <li class="active"><a href="{% url 'pred' %}">Predicates</a></li>
+    <li><a href="{% url 'inferences' %}">Inferences</a></li>
+    <li><a href="{% url 'favorites' %}">Favorites</a></li>
+    <li><a href="{% url 'statistics' %}">Statistics</a></li>
+{% endblock %}
+
+{% block content %}
+{% load staticfiles %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1 id="{{ title }}">Metric</h1>
+                <p class="lead">Choose one country and see its metrics!</p>
+                <hr />
+            </div>
+            <div class="jumbotron">
+                <h3>{{ title }}</h3>
+                <hr />
+                <div class="row">
+                    <table id="table_id" class="display">
+                        <thead>
+                            <tr>
+                                <th>Country</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for country, value in countries %}
+                                <tr about="{{ country.uri }}">
+                                    <td>
+                                        <a href="/country/{{ country.url }}"><span property="countries:countryProperty/1">{{ country.label }}</span></a>
+                                    </td>
+                                    {% ifequal value.uri value.value %}
+                                        <td><span property="{{ metric }}">{{ value.value }}</span></td>
+                                    {% else %}
+                                        <td>
+                                            {% ifnotequal value.url "" %}
+                                                <a href="/country/{{ value.url }}">
+                                                    <span rel="{{ metric }}">
+                                                        <span about="{{ value.uri }}" property="{{ value.pred_nameof }}">{{ value.value }}</span>
+                                                    </span>
+                                                </a>
+                                            {% else %}
+                                                <span rel="{{ metric }}">
+                                                    <span about="{{ value.uri }}" property="{{ value.pred_nameof }}">{{ value.value }}</span>
+                                                </span>
+                                            {% endifnotequal %}
+
+
+                                        </td>
+                                    {% endifequal %}
+
+                                </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready( function () {
+        $('#table_id').DataTable({
+            "order": [[ 1, "desc" ]],
+            scrollY:        '50vh',
+            scrollCollapse: true,
+            paging:         false
+        });
+    } );
+    </script>
+{% endblock %}

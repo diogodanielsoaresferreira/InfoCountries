@@ -1,0 +1,50 @@
+{% extends "app/layout.html" %}
+
+{% block menuNavbar %}
+    <li><a href="{% url 'home' %}">Countries</a></li>
+    <li><a href="{% url 'pred' %}">Predicates</a></li>
+    <li class="active"><a href="{% url 'inferences' %}">Inferences</a></li>
+    <li><a href="{% url 'favorites' %}">Favorites</a></li>
+    <li><a href="{% url 'statistics' %}">Statistics</a></li>
+{% endblock %}
+
+{% block content %}
+{% load staticfiles %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1 id="{{ title }}">Inferences</h1>
+                <p class="lead">Create new inferences</p>
+                <hr />
+            </div>
+            <div class="jumbotron">
+                <h3>{{ title }}</h3>
+                <hr />
+                <div class="row">
+                <ul>
+                {% for predicate, predicatevalue in inferences.items %}
+                    {% for entity1, content1 in predicatevalue.content.items %}
+                        {% for entity2, content2 in content1.content.items %}
+                            <li about="{{ entity1 }}">
+                                <a href="/country/{{ content1.url }}" >{{ content1.label }}</a> -
+                                <a href="/metric/{{ predicatevalue.url }}">{{ predicatevalue.label }}</a> -
+                                <a href="/country/{{ content2.url }}"><span rel="{{ predicate }}" resource="{{ entity2 }}">{{ content2.label }}</span></a></li>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+                <br>
+                <br>
+                {% if success %}
+                    <p>All inferences were save with success on the database!</p>
+                {% else %}
+                    <button type="button" onclick="location.href = '/inferences/save';" class="btn btn-primary">Save inferences on database!</button>
+                {% endif %}
+
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+{% endblock %}

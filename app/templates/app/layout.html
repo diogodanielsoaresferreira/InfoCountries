@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoCountries</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/datatables.css' %}">
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+</head>
+
+<body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand"><b>Info</b>Countries</a>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+                <ul class="nav navbar-nav">
+                    {% block menuNavbar %}
+                        {% if user.authenticated %}
+                            <li><a href="{% url 'home' %}">Countries</a></li>
+                            <li><a href="{% url 'pred' %}">Predicates</a></li>
+                            <li><a href="{% url 'inferences' %}">Inferences</a></li>
+                            <li><a href="{% url 'favorites' %}">Favorites</a></li>
+                        {% endif %}
+                    {% endblock %}
+                </ul>
+                {% include 'app/loginpartial.html' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content" xmlns:countries="http://www.ua.pt/ensino/uc/2380/projeto2/"
+                                        xmlns:foaf="http://xmlns.com/foaf/0.1/">
+    {% block content %}{% endblock %}
+    <!-- Loading modal-->
+    <div class="modal"><div class="loader"></div></div>
+        <hr/>
+        <footer>
+            <p>&copy; {{ year }} - <b>Info</b>Countries</p>
+        </footer>
+    </div>
+
+</div>
+
+    <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
+    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
+    <script src="{% static 'app/scripts/respond.js' %}"></script>
+    <script src="{% static 'app/scripts/django_helpers.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'app/scripts/datatables.js' %}"></script>
+
+    <script>
+        $('a').click(function(){
+            $("body").addClass("loading");
+        });
+        $('button').click(function(){
+            $("body").addClass("loading");
+        });
+    </script>
+
+{% block scripts %}
+{% endblock %}
+
+</body>
+</html>

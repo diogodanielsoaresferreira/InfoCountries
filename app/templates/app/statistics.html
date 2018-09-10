@@ -1,0 +1,59 @@
+{% extends "app/layout.html" %}
+
+{% block menuNavbar %}
+    <li><a href="{% url 'home' %}">Countries</a></li>
+    <li><a href="{% url 'pred' %}">Predicates</a></li>
+    <li><a href="{% url 'inferences' %}">Inferences</a></li>
+    <li><a href="{% url 'favorites' %}">Favorites</a></li>
+    <li class="active"><a href="{% url 'statistics' %}">Statistics</a></li>
+{% endblock %}
+
+{% block content %}
+{% load staticfiles %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1 id="{{ title }}">Statistics</h1>
+                <p class="lead">List of several countries based on a specific statistic</p>
+                <hr />
+            </div>
+            <div class="jumbotron">
+                <div class="row">
+                    <p>Best Countries to live in</p>
+                    <ol>
+                    {% for country in tolive %}
+                        <li><a about="countries:{{ country.uri }}" href="/country/{{ country.url }}">
+                            <span property="countries:countryProperty/1">{{ country.label }}</span>
+                            <span rel="countries:{{ country.predURI }}" content="{{ country.value }}"></span>
+                        </a></li>
+                    {% endfor %}
+                    </ol>
+                </div>
+                <div class="row">
+                    <p>Best Countries to invest in</p>
+                    <ol>
+                    {% for country in toinvest %}
+                        <li><a about="countries:{{ country.uri }}" href="/country/{{ country.url }}">
+                            <span property="countries:countryProperty/1">{{ country.label }}</span>
+                            <span rel="countries:countries:{{ country.predURI }}" content="{{ country.value }}"></span>
+                        </a></li>
+                    {% endfor %}
+                    </ol>
+                </div>
+                <div class="row">
+                    <p>Countries with the highest internet traffic</p>
+                    <ol>
+                    {% for country in nettraffic %}
+                        <li><a about="countries:{{ country.uri }}" href="/country/{{ country.url }}">
+                            <span property="countries:countryProperty/1">{{ country.label }}</span>
+                            <span rel="countries:{{ country.predURI }}" content="{{ country.value }}"></span>
+                        </a></li>
+                    {% endfor %}
+                    </ol>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+{% endblock %}
